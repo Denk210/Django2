@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Новости</h2>
+{% for news in page_obj %}
+    <article class="news-item">
+        <div class="news-image">
+            <img src="{{ news.image.url }}" alt="{{ news.title }}">
+        </div>
+        <div class="news-content">
+            <h3>{{ news.title }}</h3>
+            <p>{{ news.content }}</p>
+            <time>{{ news.pub_date }}</time>
+        </div>
+    </article>
+{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

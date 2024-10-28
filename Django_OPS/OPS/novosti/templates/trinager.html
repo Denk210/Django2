@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Тренажёр для решения квадратных уравнений</h1>
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="equation">
+            <p>Уравнение: {{ a }}x^2 + {{ b }}x + {{ c }} = 0</p>
+        </div>
+        <label for="solution">Ваше решение:</label>
+        <input type="hidden" name="a" value="{{ a }}">
+        <input type="hidden" name="b" value="{{ b }}">
+        <input type="hidden" name="c" value="{{ c }}">
+        <input type="text" name="solution" id="solution" required>
+        <button type="submit">Отправить</button>
+    </form>
+
+    {% if user_solution %}
+        <div class="solution">
+            <h2>Результаты:</h2>
+            <p>Ваше решение: {{ user_solution }}</p>
+            <p>Правильное решение: {{ correct_solution }}</p>
+        </div>
+    {% endif %}
+</div>
+
+<div>
+    <a href="{% url 'solve_quadratic' %}">Переход на страницу с решателем</a>
+</div>
+
+<div class="history">
+    <h2>История решений:</h2>
+    <ul>
+        {% for entry in history %}
+            <li>{{ entry.timestamp }}: {{ entry.a }}x^2 + {{ entry.b }}x + {{ entry.c }} = 0<br>
+                Ваше решение: {{ entry.user_solution }}<br>
+                Правильное решение: {{ entry.correct_solution }}</li>
+        {% endfor %}
+    </ul>
+</div><br><br>
+
+{% endblock %}

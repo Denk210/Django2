@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Решение квадратных уравнений</h1>
+<div class="container">
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        <div class="equation">
+            <p align="left"><b>Уравнение:</b></p>
+            <p>{{ equation }}</p>
+        </div>
+        <div class="solution">
+            <p align="left"><b>Решение:</b></p>
+            <p>{{ solution }}</p>
+        </div>
+    {% endif %}
+</div>
+
+<div>
+    <a href="{% url 'quadratic_trainer' %}">Переход на страницу с тринажёром</a>
+</div>
+{% endblock %}
