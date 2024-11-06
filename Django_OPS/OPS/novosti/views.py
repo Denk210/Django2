@@ -3,9 +3,9 @@ from django.shortcuts import render
 # Create your views here.
 
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from .models import News, History
+from .models import News, History, Category, Tag
 from django.http import HttpResponse
 from django.template import loader
 import math
@@ -115,3 +115,20 @@ def news_list(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'news_list.html', {'page_obj': page_obj})
+
+
+def news_by_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    news_list = News.objects.filter(category=category).order_by('-pub_date')
+    paginator = Paginator(news_list, 4)  # По 4 новости на страницу
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'news_list.html', {'page_obj': page_obj, 'category': category})
+
+def news_by_tag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    news_list = News.objects.filter(tags=tag).order_by('-pub_date')
+    paginator = Paginator(news_list, 4)  # По 4 новости на страницу
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'news_list.html', {'page_obj': page_obj, 'tag': tag})

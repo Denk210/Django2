@@ -2,6 +2,12 @@
 
 {% block content %}
 <h2>Новости</h2>
+{% if category %}
+    <h3>Категория: {{ category.name }}</h3>
+{% endif %}
+{% if tag %}
+    <h3>Тег: {{ tag.name }}</h3>
+{% endif %}
 {% for news in page_obj %}
     <article class="news-item">
         <div class="news-image">
@@ -11,6 +17,16 @@
             <h3>{{ news.title }}</h3>
             <p>{{ news.content }}</p>
             <time>{{ news.pub_date }}</time>
+            {% if news.category %}
+                <p>Категория: <a href="{% url 'news_by_category' news.category.id %}">{{ news.category.name }}</a></p>
+            {% else %}
+                <p>Категория: Не указана</p>
+            {% endif %}
+            <p>Теги:
+                {% for tag in news.tags.all %}
+                    <a href="{% url 'news_by_tag' tag.id %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
         </div>
     </article>
 {% endfor %}
